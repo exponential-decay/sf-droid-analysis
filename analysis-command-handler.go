@@ -1,5 +1,4 @@
 /* analysis-command-handler.go */
-
 package main
 
 import (
@@ -18,6 +17,7 @@ func handleAnalysisCommands(cmd int, val string) error {
    //handle command routing here...
    
    if cmd == ANALYSIS || cmd == DATABASE {
+      identifyinput(val)
       // we can analyse the content
       // id if we're looking at a db/csv/or json
       // handle appropriately
