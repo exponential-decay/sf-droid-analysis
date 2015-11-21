@@ -1,9 +1,10 @@
-/* greet.go */
+/* sf-droid-analysis.go */
 package main
 
 import (
-   //"fmt"
+   "log"
    "os"
+   "strconv"
    "github.com/codegangsta/cli"
 )
 
@@ -20,6 +21,7 @@ func main() {
    var rogues bool
    var report string
    var database string
+   var export string
 
    app.Flags = []cli.Flag {
       cli.StringFlag{
@@ -51,9 +53,29 @@ func main() {
       } else {
          if len(c.Args()) > 0 {
             //we can do things with string flagss
+            if report != "" {
+               if err := handleAnalysisCommands(ANALYSIS, report); err != nil {
+		               log.Fatal(err)
+	               }
+            }
+            if database != "" {
+               //handle rogue output
+               if err := handleAnalysisCommands(DATABASE, database); err != nil {
+		               log.Fatal(err)
+	               }
+            }
+            if export != "" {
+               //handle rogue output
+               if err := handleAnalysisCommands(EXPORT, export); err != nil {
+		               log.Fatal(err)
+	               }
+            }
          }
          if rogues == true {
             //handle rogue output
+            if err := handleAnalysisCommands(ROGUE, strconv.FormatBool(rogues)); err != nil {
+		            log.Fatal(err)
+	            }
          }
       }
    }
