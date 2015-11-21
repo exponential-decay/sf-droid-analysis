@@ -45,6 +45,7 @@ func main() {
    }
 
    app.Action = func(c *cli.Context) {
+      //cli Args() applies heuristics, os.Args is a purer check
       if len(os.Args) < 2 {
          cli.ShowAppHelp(c)
       } else {
