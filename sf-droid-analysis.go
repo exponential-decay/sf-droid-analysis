@@ -18,10 +18,10 @@ func main() {
    app.Version = "0.1.0"
    app.Author = "exponential-decay"
 
-   var rogues bool
    var report string
    var database string
    var export string
+   var rogues, heroes bool
 
    app.Flags = []cli.Flag {
       cli.StringFlag{
@@ -30,7 +30,7 @@ func main() {
          Destination:   &report,
       }, 
       cli.StringFlag{
-         Name:          "db",
+         Name:          "db, database",
          Usage:         "Database to output results from.",
          Destination:   &database,
       },     
@@ -39,10 +39,15 @@ func main() {
          Usage:         "Output Rogues Gallery",
          Destination:   &rogues,
       },
+      cli.BoolFlag{
+         Name:          "heroes, hero",
+         Usage:         "Output Heroes Gallery",
+         Destination:   &heroes,
+      },
       cli.StringFlag{
          Name:          "export",
          Usage:         "Export database as CSV.",
-         Destination:   &database,
+         Destination:   &export,
       },
    }
 
@@ -51,31 +56,28 @@ func main() {
       if len(os.Args) < 2 {
          cli.ShowAppHelp(c)
       } else {
-         if len(c.Args()) > 0 {
-            //we can do things with string flagss
-            if report != "" {
-               if err := handleAnalysisCommands(ANALYSIS, report); err != nil {
-		               log.Fatal(err)
-	               }
-            }
-            if database != "" {
-               //handle rogue output
-               if err := handleAnalysisCommands(DATABASE, database); err != nil {
-		               log.Fatal(err)
-	               }
-            }
-            if export != "" {
-               //handle rogue output
-               if err := handleAnalysisCommands(EXPORT, export); err != nil {
-		               log.Fatal(err)
-	               }
-            }
-         }
-         if rogues == true {
+         //we can do things with string flagss
+         if c.IsSet("report") {
+            if err := handleAnalysisCommands(ANALYSIS, report); err != nil {
+	               log.Fatal(err)
+               }
+         } else if c.IsSet("db") {
+            //handle rogue output
+            if err := handleAnalysisCommands(DATABASE, database); err != nil {
+	               log.Fatal(err)
+               }
+         } else if c.IsSet("export") {
+            //handle rogue output
+            if err := handleAnalysisCommands(EXPORT, export); err != nil {
+	               log.Fatal(err)
+               }
+         } else if c.IsSet("rogues") {
             //handle rogue output
             if err := handleAnalysisCommands(ROGUE, strconv.FormatBool(rogues)); err != nil {
 		            log.Fatal(err)
 	            }
+         } else {
+            cli.ShowAppHelp(c)
          }
       }
    }
