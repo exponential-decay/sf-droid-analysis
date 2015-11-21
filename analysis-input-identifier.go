@@ -44,31 +44,31 @@ func getBytes(val string) []byte {
 }
 
 func compareBytes(data []byte) int {
-   rFound := ""
+   inputFound := ""
 
    for k := range inputtypes {
       needlelen := len(inputtypes[k])
       haystack := hex.EncodeToString(data)[0:needlelen]
       if strings.ToLower(inputtypes[k]) == haystack {
-         rFound = k
+         inputFound = k
       }
    }
 
-   rType := INPUT_UNKNOWN
-   switch rFound {
+   inputType := INPUT_UNKNOWN
+   switch inputFound {
       case "SFNORMAL":
-         rType = INPUT_SFNORM
+         inputType = INPUT_SFNORM
       case "SFJSON": 
-         rType = INPUT_SFJSON
+         inputType = INPUT_SFJSON
       case "SFDROID":
-         rType = INPUT_SFDROID
+         inputType = INPUT_SFDROID
       case "DROID": 
-         rType = INPUT_DROID
+         inputType = INPUT_DROID
       case "SQLITE":
-         rType = INPUT_DATABASE
+         inputType = INPUT_DATABASE
    }
 
-   return rType 
+   return inputType 
 }
 
 func identifyinput(val string) int {
