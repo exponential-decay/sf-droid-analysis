@@ -25,7 +25,7 @@ func main() {
 
    app.Flags = []cli.Flag {
       cli.StringFlag{
-         Name:          "report, csv, csva",
+         Name:          "analysis, report, csv, csva",
          Usage:         "Droid or Siegfried report to analyse.",
          Destination:   &report,
       }, 
@@ -57,7 +57,7 @@ func main() {
          cli.ShowAppHelp(c)
       } else {
          //we can do things with string flagss
-         if c.IsSet("report") {
+         if c.IsSet("analysis") {
             if err := handleAnalysisCommands(ANALYSIS, report); err != nil {
 	               log.Fatal(err)
                }

@@ -1,6 +1,13 @@
 /* analysis-input-identifier.go */
 package main
 
+import (
+   "encoding/hex"
+   "strings"
+   "log"
+   "os"
+)
+
 const (  // iota is reset to 0
    INPUT_UNKNOWN  = iota // == 0
    INPUT_DROID    = iota // == 1
@@ -10,7 +17,61 @@ const (  // iota is reset to 0
    INPUT_DATABASE = iota // == 5
 )
 
-func identifyinput(val string) int {
+//filetype signatures
+var inputtypes map[string]string = map[string]string{
+   "SFNORMAL"  : "2D2D2D0A736965676672696564",                    //---\r\nsiegfried
+   "SFJSON"    : "7B2273696567667269656422",                      //{"siegfried"
+   "SFDROID"   : "49442C504152454E545F49442C555249",              //ID,PARENT_ID,URI
+   "DROID"     : "224944222C22504152454E545F4944222C2255524922",  //"ID","PARENT_ID","URI"
+   "SQLITE"    : "53514C69746520666F726D61742033",                //SQLite format 3
+}
 
-   return INPUT_DROID
+func getBytes(val string) []byte {
+
+   file, err := os.Open(val) // For read access.
+   if err != nil {
+	   log.Fatal(err)
+   }
+
+   data := make([]byte, 22)
+   count, err := file.Read(data)
+   if err != nil {
+	   log.Fatal(err)
+   }
+
+   log.Printf("INFO: Read %d bytes from input report: %x\n", count, data[:count])
+   return data
+}
+
+func compareBytes(data []byte) int {
+   rFound := ""
+
+   for k := range inputtypes {
+      needlelen := len(inputtypes[k])
+      haystack := hex.EncodeToString(data)[0:needlelen]
+      if strings.ToLower(inputtypes[k]) == haystack {
+         rFound = k
+      }
+   }
+
+   rType := INPUT_UNKNOWN
+   switch rFound {
+      case "SFNORMAL":
+         rType = INPUT_SFNORM
+      case "SFJSON": 
+         rType = INPUT_SFJSON
+      case "SFDROID":
+         rType = INPUT_SFDROID
+      case "DROID": 
+         rType = INPUT_DROID
+      case "SQLITE":
+         rType = INPUT_DATABASE
+   }
+
+   return rType 
+}
+
+func identifyinput(val string) int {
+   data := getBytes(val)     
+   return compareBytes(data)
 }

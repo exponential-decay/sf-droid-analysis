@@ -2,7 +2,7 @@
 package main
 
 import (
-   //"log"
+   "log"
 )
 
 const (  // iota is reset to 0
@@ -17,7 +17,7 @@ func handleAnalysisCommands(cmd int, val string) error {
    //handle command routing here...
    
    if cmd == ANALYSIS || cmd == DATABASE {
-      identifyinput(val)
+      log.Println(identifyinput(val))
       // we can analyse the content
       // id if we're looking at a db/csv/or json
       // handle appropriately
