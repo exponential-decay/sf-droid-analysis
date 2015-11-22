@@ -56,8 +56,8 @@ func handleSFdefaultoutput(sffile string) error {
 	   log.Fatal(err)
    }
 
-   var headercount int = 0
-   //var bodycount int := 0
+   var headercount   int = 0    //we don't need to keep checking against header 
+   var bodycount     int = 0
 
    scanner := bufio.NewScanner(file)
    for scanner.Scan() {
@@ -70,7 +70,22 @@ func handleSFdefaultoutput(sffile string) error {
                headercount++
                sfheader[key] = strings.Trim(value, "'")                         
             }
-         }        
+         }
+         if bodycount < len(sfbody) {
+            if _, ok := sfbody[key]; ok {
+               bodycount++
+               sfbody[key] = strings.Trim(value, "'")                         
+            }
+         } else {
+            mapslice = append(mapslice, sfbody)
+            bodycount = 0
+         }      
+      }
+   }
+
+   for i := range mapslice {
+      for k, v := range mapslice[i] {
+         log.Println(k, v, "\n")
       }
    }
 
