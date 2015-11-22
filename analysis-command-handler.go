@@ -22,7 +22,7 @@ func handleAnalysisCommands(cmd int, val string) error {
       switch inputtype { 
          case INPUT_DROID:    
          case INPUT_SFDEFAULT: 
-            log.Println("handling normal SF input.") 
+            log.Println("INFO: Handling default SF input.") 
             handleSFdefaultoutput(val) 
          case INPUT_SFJSON:   
          case INPUT_SFDROID:  

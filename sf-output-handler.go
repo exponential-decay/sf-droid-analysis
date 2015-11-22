@@ -17,7 +17,7 @@ var sfheader map[string]string = map[string]string {
    "signature" : "",
    "created"   : "",
 
-   //identifiers, SF default style (no additional signatures) 
+   //identifiers, SF default style (1.4.1) (no additional signatures) 
    "name"      : "",
    "details"   : "",
 }
@@ -28,7 +28,7 @@ var sfbody map[string]string = map[string]string {
    "modified"  : "",
    "errors"    : "",
 
-   //identifiers, sf default style (no additional signatures)
+   //identifiers, sf default style (1.4.1) (no additional signatures)
    "id"        : "",
    "puid"      : "",
    "format"    : "",
@@ -38,6 +38,17 @@ var sfbody map[string]string = map[string]string {
    "warning"   : "",
 }
 
+var mapslice []map[string]string
+
+func contains(s []int, e int) bool {
+    for _, a := range s {
+        if a == e {
+            return true
+        }
+    }
+    return false
+}
+
 func handleSFdefaultoutput(sffile string) error {
 
    file, err := os.Open(sffile) // For read access.
@@ -45,12 +56,21 @@ func handleSFdefaultoutput(sffile string) error {
 	   log.Fatal(err)
    }
 
+   var headercount int = 0
+   //var bodycount int := 0
+
    scanner := bufio.NewScanner(file)
    for scanner.Scan() {
       line := strings.SplitN(scanner.Text(), ":", 2)
       if line[0] != "---" {
          key, value := strings.Trim(line[0], " -"), strings.Trim(line[1], " ")
-         log.Println(key, value)
+         if headercount < len(sfheader) {
+            //check key in map syntax: http://stackoverflow.com/a/2050629      
+            if _, ok := sfheader[key]; ok {
+               headercount++
+               sfheader[key] = strings.Trim(value, "'")                         
+            }
+         }        
       }
    }
 
