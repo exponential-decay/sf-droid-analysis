@@ -9,12 +9,12 @@ import (
 )
 
 const (  // iota is reset to 0
-   INPUT_UNKNOWN  = iota // == 0
-   INPUT_DROID    = iota // == 1
-   INPUT_SFNORM   = iota // == 2
-   INPUT_SFJSON   = iota // == 3
-   INPUT_SFDROID  = iota // == 4
-   INPUT_DATABASE = iota // == 5
+   INPUT_UNKNOWN     = iota // == 0
+   INPUT_DROID       = iota // == 1
+   INPUT_SFDEFAULT   = iota // == 2
+   INPUT_SFJSON      = iota // == 3
+   INPUT_SFDROID     = iota // == 4
+   INPUT_DATABASE    = iota // == 5
 )
 
 //filetype signatures
@@ -32,6 +32,7 @@ func getBytes(val string) []byte {
    if err != nil {
 	   log.Fatal(err)
    }
+   defer file.Close()
 
    data := make([]byte, 22)
    count, err := file.Read(data)
@@ -57,7 +58,7 @@ func compareBytes(data []byte) int {
    inputType := INPUT_UNKNOWN
    switch inputFound {
       case "SFNORMAL":
-         inputType = INPUT_SFNORM
+         inputType = INPUT_SFDEFAULT
       case "SFJSON": 
          inputType = INPUT_SFJSON
       case "SFDROID":

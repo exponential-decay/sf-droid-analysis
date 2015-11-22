@@ -2,6 +2,7 @@
 package main
 
 import (
+   "os"
    "log"
 )
 
@@ -17,10 +18,19 @@ func handleAnalysisCommands(cmd int, val string) error {
    //handle command routing here...
    
    if cmd == ANALYSIS || cmd == DATABASE {
-      log.Println(identifyinput(val))
-      // we can analyse the content
-      // id if we're looking at a db/csv/or json
-      // handle appropriately
+      inputtype := identifyinput(val)
+      switch inputtype { 
+         case INPUT_DROID:    
+         case INPUT_SFDEFAULT: 
+            log.Println("handling normal SF input.") 
+            handleSFdefaultoutput(val) 
+         case INPUT_SFJSON:   
+         case INPUT_SFDROID:  
+         case INPUT_DATABASE: 
+         default: 
+            log.Println("INFO: Unknown input type.")
+            os.Exit(0)
+      }
    }
 
    if cmd == ROGUE {
