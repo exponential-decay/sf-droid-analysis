@@ -11,6 +11,33 @@ import (
    "strings"
 )
 
+var sfheader map[string]string = map[string]string {
+   "siegfried" : "",
+   "scandate"  : "",
+   "signature" : "",
+   "created"   : "",
+
+   //identifiers, SF default style (no additional signatures) 
+   "name"      : "",
+   "details"   : "",
+}
+ 
+var sfbody map[string]string = map[string]string {
+   "filename"  : "",
+   "filesize"  : "",
+   "modified"  : "",
+   "errors"    : "",
+
+   //identifiers, sf default style (no additional signatures)
+   "id"        : "",
+   "puid"      : "",
+   "format"    : "",
+   "version"   : "",
+   "mime"      : "",
+   "basis"     : "",
+   "warning"   : "",
+}
+
 func handleSFdefaultoutput(sffile string) error {
 
    file, err := os.Open(sffile) // For read access.
