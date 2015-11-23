@@ -93,5 +93,7 @@ func handleSFdefaultoutput(sffile string) error {
       log.Fatal(err)
    }
 
+   dostuff()
+
    return nil
 }
