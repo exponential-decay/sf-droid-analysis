@@ -10,6 +10,7 @@ import (
 
 func dostuff() error {
 
+   //http://golang-basic.blogspot.co.nz/2014/06/golang-database-step-by-step-guide-on.html
    var DB_DRIVER string
    sql.Register(DB_DRIVER, &sqlite3.SQLiteDriver{})
 
@@ -17,7 +18,6 @@ func dostuff() error {
    if err != nil {
       log.Println("ERROR: Failed to create the handle.")
    }
-
 
    return nil
 }
